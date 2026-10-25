@@ -41,11 +41,14 @@ export function Terminal({
   playerId,
   dispatch,
   onClose,
+  remoteSeats = [],
 }: {
   game: GameState;
   playerId: string;
   dispatch: Dispatch;
   onClose: () => void;
+  /** Players who are on their own device, so trades with them need their approval. */
+  remoteSeats?: string[];
 }) {
   const [view, setView] = useState<View>('home');
   const me = game.players.find((p) => p.id === playerId)!;
@@ -79,7 +82,7 @@ export function Terminal({
       {(view === 'chance' || view === 'chest') && <CardsView {...props} deck={view} />}
       {view === 'jail' && <JailView {...props} />}
       {view === 'props' && <PropsView {...props} />}
-      {view === 'trade' && <TradeView {...props} />}
+      {view === 'trade' && <TradeView {...props} remoteSeats={remoteSeats} />}
       {view === 'bankrupt' && <BankruptView {...props} />}
     </Sheet>
   );
@@ -540,5 +543,31 @@ function BankruptView({ game, me, finish }: ViewProps) {
         Declare {me.name} bankrupt
       </button>
     </div>
+  );
+}
+
+/** Read-only look at another player's card and properties. */
+export function PlayerInfo({ game, playerId, onClose }: { game: GameState; playerId: string; onClose: () => void }) {
+  const p = game.players.find((x) => x.id === playerId)!;
+  const owned = ownedBy(game, p.id);
+  return (
+    <Sheet title={p.name} onClose={onClose}>
+      <DebitCard player={p} state={game} compact />
+      {!owned.length && <p className="muted center">No properties.</p>}
+      <div className="list">
+        {owned.map((x) => {
+          const h = game.holdings[x.id];
+          const rent = rentFor(game, x.id, {});
+          return (
+            <div key={x.id} className={`prop-row ${h.mortgaged ? 'mortgaged' : ''}`}>
+              <GroupDot group={x.group} />
+              <span className="prop-name">{x.name}</span>
+              {x.kind === 'street' && <Houses n={h.houses} />}
+              <span className="prop-meta">{h.mortgaged ? 'Mortgaged' : rent === null ? '4×/10× dice' : `Rent ${money(rent)}`}</span>
+            </div>
+          );
+        })}
+      </div>
+    </Sheet>
   );
 }

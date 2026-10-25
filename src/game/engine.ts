@@ -85,7 +85,7 @@ export interface GameState extends Snapshot {
   past: { snap: Snapshot; logLength: number }[];
 }
 
-const MAX_UNDO = 100;
+export const MAX_UNDO = 100;
 
 export interface TradeSide {
   cash: number;

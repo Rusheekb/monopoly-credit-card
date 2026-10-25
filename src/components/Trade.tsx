@@ -57,7 +57,18 @@ function Side({ game, player, side, onChange }: { game: GameState; player: Playe
   );
 }
 
-export function TradeView({ game, me, finish }: { game: GameState; me: Player; dispatch: Dispatch; finish: (a: Action) => void }) {
+export function TradeView({
+  game,
+  me,
+  finish,
+  remoteSeats,
+}: {
+  game: GameState;
+  me: Player;
+  dispatch: Dispatch;
+  finish: (a: Action) => void;
+  remoteSeats: string[];
+}) {
   const others = activePlayers(game).filter((p) => p.id !== me.id);
   const [partner, setPartner] = useState(others[0]?.id ?? '');
   const [mine, setMine] = useState(empty);
@@ -83,7 +94,7 @@ export function TradeView({ game, me, finish }: { game: GameState; me: Player; d
         disabled={nothing}
         onClick={() => finish({ type: 'trade', a: me.id, b: them.id, aGives: mine, bGives: theirs })}
       >
-        Both agree — make the trade
+        {remoteSeats.includes(them.id) ? `Send offer to ${them.name}` : 'Both agree — make the trade'}
       </button>
     </div>
   );

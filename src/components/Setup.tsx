@@ -48,7 +48,15 @@ export function SettingsForm({
   );
 }
 
-export function Setup({ onStart }: { onStart: (players: NewPlayer[], settings: Settings) => void }) {
+export function Setup({
+  onStart,
+  onBack,
+  hosting,
+}: {
+  onStart: (players: NewPlayer[], settings: Settings) => void;
+  onBack: () => void;
+  hosting: boolean;
+}) {
   const [players, setPlayers] = useState<NewPlayer[]>([
     { name: '', color: PLAYER_COLORS[0] },
     { name: '', color: PLAYER_COLORS[1] },
@@ -73,12 +81,16 @@ export function Setup({ onStart }: { onStart: (players: NewPlayer[], settings: S
 
   return (
     <main className="setup">
+      <button className="link-back" onClick={onBack}>
+        ‹ Back
+      </button>
       <div className="hero">
-        <div className="hero-card" aria-hidden>
-          <span className="chip" />
-        </div>
-        <h1>Bankroll</h1>
-        <p>Ditch the paper money. Every player gets a debit card and this phone is the bank.</p>
+        <h1 className="small-title">{hosting ? 'Host a game' : 'Single-device game'}</h1>
+        <p>
+          {hosting
+            ? 'Add everyone who’s playing. Next you’ll get a code for the others to join from their phones.'
+            : 'Add everyone who’s playing. This phone will be the bank.'}
+        </p>
       </div>
 
       <section className="panel">
@@ -128,7 +140,7 @@ export function Setup({ onStart }: { onStart: (players: NewPlayer[], settings: S
       </section>
 
       <button className="btn primary big" onClick={() => onStart(players, settings)}>
-        Deal cards
+        {hosting ? 'Create room' : 'Deal cards'}
       </button>
     </main>
   );

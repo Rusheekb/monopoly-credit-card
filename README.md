@@ -6,6 +6,23 @@ A phone-friendly web app that replaces Monopoly's paper money. Every player gets
 "debit card" with a live balance, and one shared device acts as the bank. Tap a card
 to open that player's terminal and handle any transaction in a couple of taps.
 
+## Play together on everyone's phone
+
+- **Host a game** on one device: enter the players and you get a 5-character room code and a QR code.
+- Everyone else taps **Join a game** (or scans the QR code), types the code, and picks which player they are.
+- Each phone shows every balance live. You act on your own card (pay rent, buy, build, draw cards…) and can
+  look at anyone's properties. The host's device is also the banker and can act on any card.
+- Trades go to the other player's phone to accept or decline.
+- Phones that sleep or reload reconnect on their own and keep their seat. The game lives on the host's
+  device, so the host should keep the app open (it survives a reload too).
+
+Phones connect directly to each other over WebRTC; the free [PeerJS](https://peerjs.com) cloud server only
+introduces them, so there is no account or backend to set up. To use your own PeerJS server, add
+`?peer=host:port` to the URL.
+
+Prefer one shared phone? Choose **Single device** and pass it around; you can switch a single-device game
+to multi-phone later from the ⚙ menu.
+
 ## What it handles
 
 | Situation | How |
@@ -47,4 +64,5 @@ can also be hosted on any other web server. On a phone, use "Add to Home Screen"
 - `src/game/board.ts` — title deed data for the US board
 - `src/game/cards.ts` — Chance and Community Chest money cards
 - `src/game/engine.ts` — pure rules engine: every transaction is an `Action` applied by `apply()`, with undo
+- `src/net/` — multiplayer: the host runs the engine and relays state to guests over PeerJS; guests send actions
 - `src/components/` — React UI (player terminal, trade, setup, shared widgets)

@@ -122,11 +122,14 @@ export function DebitCard({
   state,
   onClick,
   compact,
+  tag,
 }: {
   player: Player;
   state: Snapshot;
   onClick?: () => void;
   compact?: boolean;
+  /** Small label such as "You". */
+  tag?: string;
 }) {
   const prev = useRef(player.balance);
   const [delta, setDelta] = useState<{ n: number; k: number } | null>(null);
@@ -167,6 +170,7 @@ export function DebitCard({
       </div>
       {!compact && <OwnedStrip state={state} player={player.id} />}
       <div className="card-badges">
+        {tag && <span className="badge tag">{tag}</span>}
         {player.balance < 0 && !player.bankrupt && <span className="badge danger">In debt</span>}
         {player.jailCards > 0 && <span className="badge">🔑 Jail free ×{player.jailCards}</span>}
       </div>
