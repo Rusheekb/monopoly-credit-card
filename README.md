@@ -1,5 +1,7 @@
 # Bankroll — a debit card for Monopoly
 
+**Play it: https://rusheekb.github.io/monopoly-credit-card/**
+
 A phone-friendly web app that replaces Monopoly's paper money. Every player gets a
 "debit card" with a live balance, and one shared device acts as the bank. Tap a card
 to open that player's terminal and handle any transaction in a couple of taps.
@@ -36,8 +38,9 @@ npm test         # rules engine tests
 npm run build    # static site in dist/
 ```
 
-`dist/` is a fully static site (relative paths), so it can be hosted anywhere — GitHub
-Pages, Netlify, or any web server. On a phone, use "Add to Home Screen" for a full-screen app.
+Every push to `main` runs the tests, builds, and publishes `dist/` to the `gh-pages`
+branch, which GitHub Pages serves. `dist/` is a fully static site (relative paths), so it
+can also be hosted on any other web server. On a phone, use "Add to Home Screen" for a full-screen app.
 
 ## Code layout
 
